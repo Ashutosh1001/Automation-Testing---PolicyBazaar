@@ -70,11 +70,5 @@ public class TravelInsuranceDetailsTest extends TestBase {
 		logger.log(Status.PASS, "getinsuranceProviderName");
 		logger.log(Status.INFO, "Clicking on sort price dropdown");
 	}
-	
-	@AfterSuite(groups= {"Default","Regression"})
-	public void closeBrowser()throws Exception
-	{
-		driver.close();
-	}
 
 }
