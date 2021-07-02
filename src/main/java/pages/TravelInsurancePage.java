@@ -17,8 +17,9 @@ public class TravelInsurancePage extends TestBase {
 
 	public TravelInsurancePage() throws Exception {
 		super();
+		
 	}
-
+	public JavascriptExecutor executor;
 	By destination = By.id("destination-autocomplete");
 	
 	By nextButton = By.xpath("//button[@class='enable' and text()='Next']");
@@ -42,40 +43,52 @@ public class TravelInsurancePage extends TestBase {
 	
 	/* Entering student details in form */
 	public void fillStudentDetails(String country, String age1, String age2, String startDate, String endDate, String mobileNumber) {
+		setDestination(country);
+		setPersonAge(age1, age2);
+		setTravelDate(startDate, endDate);
+		setMobileNumber(mobileNumber);
+	}
+	
+	public void setDestination(String country) {
 		driver.findElement(destination).sendKeys(country);
 		driver.findElement(destination).sendKeys(Keys.RETURN);
 		driver.findElement(nextButton).click();
-		
+	}
+	
+	public void setPersonAge(String age1, String age2) {
 		Select age1DropDown = new Select(driver.findElement(travellerAge1Field));
 		age1DropDown.selectByVisibleText(age1+" yrs");
 		driver.findElement(addTraveller).click();
 		Select age2DropDown = new Select(driver.findElement(travellerAge2Field));
 		age2DropDown.selectByVisibleText(age2+" yrs");
 		driver.findElement(nextButton).click();
-		
-		JavascriptExecutor executor = (JavascriptExecutor) driver;
+	}
+
+	public void setTravelDate(String startDate, String endDate){
+		executor = (JavascriptExecutor) driver;
 		
 		element = driver.findElement(startDateElement);
-		executor.executeScript("arguments[0].removeAttribute('readonly','readonly')", element);
+		executor.executeScript("arguments[0].removeAttribute('readonly')", element);
 		element.sendKeys(startDate);
+		
 		element = driver.findElement(endDateElement);
-		element.click();
-		executor.executeScript("arguments[0].removeAttribute('readonly','readonly')", element);
+		executor.executeScript("arguments[0].removeAttribute('readonly')", element);
 		element.sendKeys(endDate);
+		
 		element = driver.findElement(nextButton);
 		executor.executeScript("arguments[0].click()", element);
-		
+	}
+	
+	public void setMobileNumber(String mobileNumber) {
+
 		driver.findElement(travelMobile).sendKeys(mobileNumber);
-		
 		element = driver.findElement(viewPlansButton);
 		executor.executeScript("arguments[0].click()", element);
-		System.out.println("View plan clicked");
-		driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
-		
-
 	}
 	
 	public void setStudentPlanOption() {
+		WebDriverWait wait = new WebDriverWait(driver,30);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(studentPlanOption));
 		driver.findElement(studentPlanOption).click();
 		driver.findElement(student1VisaCheckbox).click();
 		driver.findElement(student2VisaCheckbox).click();
@@ -87,39 +100,9 @@ public class TravelInsurancePage extends TestBase {
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 	
-	/*
-	 * Click get free quotes button
-	 
-	public void getFreeQuotes() throws InterruptedException {
-		WebDriverWait wait = new WebDriverWait(driver,2000);
-		
-		// Wait till the element is not visible.
-		WebElement element=wait. until(ExpectedConditions. visibilityOfElementLocated(By. xpath("//*[@id=\"travelname\"]")));
-		Select select = new Select(driver.findElement(prefix));
-		select.selectByVisibleText("Mr.");
-		driver.findElement(travelName).clear();
-		driver.findElement(travelName).sendKeys("Ashutosh");
-		Select selectCountry = new Select(driver.findElement(travelCountry));
-		selectCountry.selectByVisibleText("INDIA (+91)");
-		driver.findElement(travelMobile).sendKeys("9876543210");
-		driver.findElement(travelEmail).clear();
-		driver.findElement(travelEmail).sendKeys("Ashutosh@gmail.com");
-		element = driver.findElement(By.xpath("//*[@id=\"topForm\"]/section/div[2]/div[2]/div[1]/div[2]/div/a[2]"));
-		JavascriptExecutor executor = (JavascriptExecutor) driver;
-		executor.executeScript("arguments[0].click()", element);
-	}
-	*/
-	
 	public void sortPrice() {
-
 		Select sortDropDown = new Select(driver.findElement(sortByDropDown));
 		sortDropDown.selectByIndex(1);
-		/*
-		Select sort = new Select(driver
-				.findElement(By.xpath("/html/body/section/main/div/div[1]/div/div[1]/div[4]/ul/li[5]/div/select")));
-		sort.selectByVisibleText("Price: Low to High");
-		*/
-		
 	}
 	
 	public void insuranceDetails() {
@@ -138,52 +121,5 @@ public class TravelInsurancePage extends TestBase {
         	
         	System.out.println(companyName+" - "+planName+" - Rs "+planPrice);
         }
-        /*
-        Select sort = new Select(driver
-                .findElement(By.xpath("/html/body/section/main/div/div[1]/div/div[1]/div[4]/ul/li[5]/div/select")));
-        sort.selectByVisibleText("Price: Low to High");
-        for (int i = 8; i < 11; i++) {
-            @SuppressWarnings("unused")
-			List<WebElement> total = driver.findElements(
-                    By.xpath("//body/section[@id='root']/main[1]/div[1]/div[1]/div[1]/div[1]/div[" + i + "]/div[1]/div[1]/div[1]/div[1]/div[1]"));
-            WebElement name = driver.findElement(By.xpath(
-                    "//*[@id=\"root\"]/main/div/div[1]/div/div[1]/div[" + i + "]/div/div/div[1]/div[1]/div"));
-            String n = name.getAttribute("class").substring(5);
-            System.out.print(n + "-");
-            System.out.print("Rs." + driver
-                            .findElement(By.xpath("/html[1]/body[1]/section[1]/main[1]/div[1]/div[1]/div[1]/div[1]/div[" + i + "]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/button[1]"))
-                            .getText().substring(2));
-            System.out.println();
-        }
-        
-        */
-        
-        
-        
-        /*****change******/
-	//driver.close();
 	}
-	/*
-	 public void invalidEmail() throws InterruptedException{
-	      WebDriverWait wait = new WebDriverWait(driver,2000);
-			
-			// Wait till the element is not visible.
-			WebElement element=wait. until(ExpectedConditions. visibilityOfElementLocated(By. xpath("//*[@id=\"travelname\"]")));
-			Select select = new Select(driver.findElement(prefix));
-			select.selectByVisibleText("Mr.");
-			driver.findElement(travelName).clear();
-			driver.findElement(travelName).sendKeys("haritha");
-			Select selectCountry = new Select(driver.findElement(travelCountry));
-			selectCountry.selectByVisibleText("INDIA (+91)");
-			driver.findElement(travelMobile).sendKeys("9876543210");
-			driver.findElement(travelEmail).clear();
-			driver.findElement(travelEmail).sendKeys("Haritha");
-			element = driver.findElement(By.xpath("//*[@id=\"topForm\"]/section/div[2]/div[2]/div[1]/div[2]/div/a[2]"));
-			JavascriptExecutor executor = (JavascriptExecutor) driver;
-			executor.executeScript("arguments[0].click()", element);
-			String msg=driver.findElement(By.xpath("//*[@id=\"topForm\"]/section/div[2]/div[2]/div[1]/div[2]/div/div[3]/div[2]")).getText();
-			System.out.println(msg);
-		}
-	}
-	*/
 }
